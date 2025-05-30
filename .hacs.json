@@ -1,0 +1,6 @@
+{
+  "name": "LD2450 BLE",
+  "content_in_root": false,
+  "domain": "hacs_ld2450_ble",
+  "type": "integration"
+}

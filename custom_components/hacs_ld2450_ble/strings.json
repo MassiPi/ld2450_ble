@@ -1,0 +1,62 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "data": {
+          "address": "Bluetooth address"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "not_supported": "Device not supported",
+      "already_in_progress": "[%key:common::config_flow::abort::already_in_progress%]",
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+      "no_devices_found": "[%key:common::config_flow::abort::no_devices_found%]"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "target_one_x": {
+        "name": "Target One X"
+      },
+      "target_one_y": {
+        "name": "Target One Y"
+      },
+      "target_one_speed": {
+        "name": "Target One Speed"
+      },
+      "target_one_resolution": {
+        "name": "Target One Resolution"
+      },
+      "target_two_x": {
+        "name": "Target Two X"
+      },
+      "target_two_y": {
+        "name": "Target Two Y"
+      },
+      "target_two_speed": {
+        "name": "Target Two Speed"
+      },
+      "target_two_resolution": {
+        "name": "Target Two Resolution"
+      },
+      "target_three_x": {
+        "name": "Target Three X"
+      },
+      "target_three_y": {
+        "name": "Target Three Y"
+      },
+      "target_three_speed": {
+        "name": "Target Three Speed"
+      },
+      "target_three_resolution": {
+        "name": "Target Three Resolution"
+      }
+    }
+  }
+}
