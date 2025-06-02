@@ -1,0 +1,156 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "data": {
+          "address": "Bluetooth address"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "not_supported": "Device not supported",
+      "already_in_progress": "[%key:common::config_flow::abort::already_in_progress%]",
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+      "no_devices_found": "[%key:common::config_flow::abort::no_devices_found%]"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "target_one_x": {
+        "name": "Target One X"
+      },
+      "target_one_y": {
+        "name": "Target One Y"
+      },
+      "target_one_speed": {
+        "name": "Target One Speed"
+      },
+      "target_one_resolution": {
+        "name": "Target One Resolution"
+      },
+      "target_two_x": {
+        "name": "Target Two X"
+      },
+      "target_two_y": {
+        "name": "Target Two Y"
+      },
+      "target_two_speed": {
+        "name": "Target Two Speed"
+      },
+      "target_two_resolution": {
+        "name": "Target Two Resolution"
+      },
+      "target_three_x": {
+        "name": "Target Three X"
+      },
+      "target_three_y": {
+        "name": "Target Three Y"
+      },
+      "target_three_speed": {
+        "name": "Target Three Speed"
+      },
+      "target_three_resolution": {
+        "name": "Target Three Resolution"
+      },
+      "target_one_distance": {
+        "name": "Target One Distance"
+      },
+      "target_two_distance": {
+        "name": "Target Two Distance"
+      },
+      "target_three_distance": {
+        "name": "Target Three Distance"
+      },
+      "target_one_angle": {
+        "name": "Target One Angle"
+      },
+      "target_two_angle": {
+        "name": "Target Two Angle"
+      },
+      "target_three_angle": {
+        "name": "Target Three Angle"
+      }
+    },
+    "binary_sensor": {
+      "any_presence": {
+        "name": "Presence"
+      },
+      "one_target": {
+        "name": "One Target"
+      },
+      "two_target": {
+        "name": "Two Target"
+      },
+      "three_target": {
+        "name": "Three Target"
+      },
+      "one_moving": {
+        "name": "Target One Moving"
+      },
+      "two_moving": {
+        "name": "Target Two Moving"
+      },
+      "three_moving": {
+        "name": "Target Three Moving"
+      }
+    },
+    "switch": {
+      "target_mode": {
+        "name": "Multi-Target Mode"
+      }
+    },
+    "select": {
+      "area_mode": {
+        "name": "Area Mode"
+      }
+    },
+    "button": {
+      "reboot": {
+        "name": "Reboot"
+      }
+    },
+    "number": {
+      "area_one_first_vertex_x": {
+        "name": "Area One First Vertex X"
+      },
+      "area_one_first_vertex_y": {
+        "name": "Area One First Vertex Y"
+      },
+      "area_one_second_vertex_x": {
+        "name": "Area One Second Vertex X"
+      },
+      "area_one_second_vertex_y": {
+        "name": "Area One Second Vertex Y"
+      },
+      "area_two_first_vertex_x": {
+        "name": "Area Two First Vertex X"
+      },
+      "area_two_first_vertex_y": {
+        "name": "Area Two First Vertex Y"
+      },
+      "area_two_second_vertex_x": {
+        "name": "Area Two Second Vertex X"
+      },
+      "area_two_second_vertex_y": {
+        "name": "Area Two Second Vertex Y"
+      },
+      "area_three_first_vertex_x": {
+        "name": "Area Three First Vertex X"
+      },
+      "area_three_first_vertex_y": {
+        "name": "Area Three First Vertex Y"
+      },
+      "area_three_second_vertex_x": {
+        "name": "Area Three Second Vertex X"
+      },
+      "area_three_second_vertex_y": {
+        "name": "Area Three Second Vertex Y"
+      }
+    }
+  }
+}
