@@ -1,5 +1,5 @@
 {
-  "domain": "hacs_ld2450_ble",
+  "domain": "ld2450_ble",
   "name": "LD2450 BLE",
   "bluetooth": [
     {
