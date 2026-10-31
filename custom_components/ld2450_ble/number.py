@@ -14,6 +14,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.helpers.restore_state import RestoreEntity
 
 from . import LD2450BLE, LD2450BLECoordinator
 from .const import DOMAIN
@@ -220,7 +221,7 @@ async def async_setup_entry(
     )
 
 
-class LD2450BLENumber(CoordinatorEntity[LD2450BLECoordinator], NumberEntity):
+class LD2450BLENumber(CoordinatorEntity[LD2450BLECoordinator], NumberEntity, RestoreEntity):
     """Generic sensor for LD2450BLE."""
 
     _attr_has_entity_name = True
@@ -250,6 +251,23 @@ class LD2450BLENumber(CoordinatorEntity[LD2450BLECoordinator], NumberEntity):
             self._attr_native_value = 5
         else:
             self._attr_native_value = 0
+
+    async def async_added_to_hass(self) -> None:
+        """Restore the timeout value after Home Assistant reloads."""
+        await super().async_added_to_hass()
+        if self._key == "presence_timeout":
+            last_state = await self.async_get_last_state()
+            if last_state is not None:
+                try:
+                    restored_value = float(last_state.state)
+                    if self.entity_description.native_min_value <= restored_value <= self.entity_description.native_max_value:
+                        self._attr_native_value = restored_value
+                except (ValueError, TypeError):
+                    _LOGGER.warning(
+                        "Could not restore presence timeout from state %r",
+                        last_state.state,
+                    )
+            self.async_write_ha_state()
 
     @property
     def unique_id(self):

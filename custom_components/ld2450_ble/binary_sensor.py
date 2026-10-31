@@ -12,6 +12,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_call_later
@@ -141,6 +142,7 @@ async def async_setup_entry(
             data.coordinator,
             data.device,
             entry.title,
+            entry.entry_id,
             description,
         )
         for description in SENSOR_DESCRIPTIONS
@@ -157,12 +159,14 @@ class LD2450BLEBinary(CoordinatorEntity[LD2450BLECoordinator], BinarySensorEntit
         coordinator: LD2450BLECoordinator,
         device: LD2450BLE,
         name: str,
+        config_entry_id: str,
         description: BinarySensorEntityDescription,
     ) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator)
         self._coordinator = coordinator
         self._device = device
+        self._config_entry_id = config_entry_id
         self._key = description.key
         self.entity_description = description
         self._attr_unique_id = f"{device.name}_{self._key}"
@@ -198,18 +202,53 @@ class LD2450BLEBinary(CoordinatorEntity[LD2450BLECoordinator], BinarySensorEntit
         return False
 
     def _get_presence_timeout(self) -> float:
-        """Get presence clear timeout from number entity."""
+        """Get presence clear timeout from this integration config entry."""
         try:
-            # Try to find presence timeout entity for this device
-            device_name_clean = self._device.name.lower().replace(" ", "_")
-            for ent_id, state in self.hass.states.async_all("number"):
-                if "presence_timeout" in ent_id and device_name_clean in ent_id and state.state not in (STATE_UNAVAILABLE, STATE_UNKNOWN):
-                    try:
-                        return float(state.state)
-                    except (ValueError, TypeError):
-                        pass
+            entity_registry = er.async_get(self.hass)
+
+            # Config-entry association is reliable even if entity/device names
+            # are customized and avoids assuming a Bluetooth identifier is unique.
+            entries = er.async_entries_for_config_entry(
+                entity_registry, self._config_entry_id
+            )
+            for entry in entries:
+                if entry.domain != "number" or not entry.unique_id.endswith(
+                    f"_{CONF_PRESENCE_TIMEOUT}"
+                ):
+                    continue
+
+                state = self.hass.states.get(entry.entity_id)
+                if state is None or state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN):
+                    _LOGGER.debug(
+                        "%s: timeout entity %s has no usable state",
+                        self._device.name, entry.entity_id,
+                    )
+                    continue
+
+                try:
+                    timeout = float(state.state)
+                    _LOGGER.debug(
+                        "%s: using presence timeout %.1fs from %s",
+                        self._device.name, timeout, entry.entity_id,
+                    )
+                    return timeout
+                except (ValueError, TypeError):
+                    _LOGGER.warning(
+                        "%s: invalid timeout value %r in %s",
+                        self._device.name, state.state, entry.entity_id,
+                    )
+
+            _LOGGER.warning(
+                "%s: no presence_timeout number found for config entry %s; "
+                "using default %.1fs",
+                self._device.name, self._config_entry_id, DEFAULT_PRESENCE_TIMEOUT,
+            )
         except Exception:
-            pass
+            _LOGGER.exception(
+                "%s: error looking up presence timeout; using default %.1fs",
+                self._device.name, DEFAULT_PRESENCE_TIMEOUT,
+            )
+
         return DEFAULT_PRESENCE_TIMEOUT
 
     def _cancel_timer(self):
